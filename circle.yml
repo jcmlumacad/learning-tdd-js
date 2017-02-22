@@ -1,0 +1,12 @@
+machine:
+  node:
+    version: 6.4.0
+dependencies:
+  override:
+    - npm install
+test:
+  pre:
+    - npm install -g karma bower
+    - bower install
+  override:
+    - karma start --single-run
