@@ -7,6 +7,7 @@ dependencies:
 test:
   pre:
     - npm install -g karma jasmine bower
+    - npm update
     - bower install
   override:
     - karma start --single-run
