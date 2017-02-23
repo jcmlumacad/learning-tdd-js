@@ -3,7 +3,18 @@ language: node_js
 node_js:
   - 6.4.0
 before_script:
-  - npm install -g karma karma-jasmine jasmine jasmine-core bower
+  - npm install -g karma karma-jasmine jasmine jasmine-core bower web-component-tester
   - bower install
+cache:
+  directories:
+  - node_modules
+addons:
+ firefox: latest
+ apt:
+  sources:
+    - google-chrome
+  packages:
+    - google-chrome-stable
 script:
-  - karma start --single-run --browsers /usr/local/bin/custom-browser.sh
+  - xvfb-run wct
+  - karma start --single-run
