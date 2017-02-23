@@ -4,7 +4,7 @@ machine:
 test:
   pre:
     - npm update
-    - npm install -g karma jasmine jasmine-core bower
+    - npm install -g karma karma-jasmine jasmine jasmine-core bower
     - bower install
   override:
     - karma start --single-run
