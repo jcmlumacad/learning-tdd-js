@@ -3,18 +3,7 @@ language: node_js
 node_js:
   - 6.4.0
 before_script:
-  - npm install -g karma karma-jasmine jasmine jasmine-core bower web-component-tester
+  - npm install -g karma karma-jasmine jasmine jasmine-core phantomjs karma-phantomjs-launcher bower
   - bower install
-cache:
-  directories:
-  - node_modules
-addons:
- firefox: latest
- apt:
-  sources:
-    - google-chrome
-  packages:
-    - google-chrome-stable
 script:
-  - xvfb-run wct
-  - karma start --single-run
+  - karma start --single-run --browsers PhantomJS_custom

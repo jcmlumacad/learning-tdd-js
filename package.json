@@ -2,13 +2,10 @@
   "name": "learning-tdd",
   "version": "1.0.0",
   "description": "Sample of TDD",
-  "scripts": {
-    "test": "jasmine JASMINE_CONFIG_PATH=jasmine.json"
-  },
   "author": "John Conrad Lumacad <jcmlumacad@tmj.ph>",
   "license": "ISC",
   "devDependencies": {
     "karma": "^1.5.0",
-    "karma-chrome-launcher": "^2.0.0"
+    "karma-phantomjs-launcher": "^1.0.2"
   }
 }
