@@ -6,4 +6,4 @@ test:
     - npm install -g karma karma-jasmine jasmine jasmine-core bower
     - bower install
   override:
-    - karma start --single-run --browsers /usr/local/bin/custom-browser.sh
+    - karma start --single-run --browsers PhantomJS
