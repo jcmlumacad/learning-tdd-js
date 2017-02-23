@@ -3,8 +3,7 @@ machine:
     version: 6.4.0
 test:
   pre:
-    - npm update
     - npm install -g karma karma-jasmine jasmine jasmine-core bower
     - bower install
   override:
-    - karma start --single-run
+    - karma start --single-run --browsers /usr/local/bin/custom-browser.sh
