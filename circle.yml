@@ -4,6 +4,7 @@ machine:
 test:
   pre:
     - npm install --only=dev
+    - npm install karma-jasmine
     - npm install -g karma jasmine bower
     - bower install
   override:
