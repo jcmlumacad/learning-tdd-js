@@ -3,8 +3,8 @@ language: node_js
 node_js:
   - 6.4.0
 before_script:
+  - npm install --only=dev
   - npm install -g karma jasmine bower
-  - npm update
   - bower install
 script:
   - karma start --single-run
