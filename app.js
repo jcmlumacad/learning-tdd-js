@@ -8,13 +8,14 @@
 
     function SampleController(SampleFactory) {
         var vm = this;
+
         vm.login = {
-            username: 'jane_doe2',
-            password: 'Dfg5678$'
+            email: 'john@doe.com',
+            password: '123456'
         };
         vm.register = {
-            username: 'conds_18',
-            password: 'Dfg5678$'
+            email: 'jane@doe.com',
+            password: '123456'
         };
         vm.users = SampleFactory.all();
     }
@@ -27,16 +28,7 @@
         return factory;
 
         function allUsers() {
-            return [
-                {
-                    username: 'john_doe1',
-                    password: 'abcd123@'
-                },
-                {
-                    username: 'jane_doe2',
-                    password: 'Dfg5678$'
-                }
-            ];
+            return [];
         }
     }
 })();
