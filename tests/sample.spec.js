@@ -54,10 +54,17 @@ describe('SampleController', function () {
             });
         });
 
-        it('must match the login credentials', function () {
+        it('should login with correct credentials', function () {
             expect(controller.users).toContain({
                 username: controller.login.username,
                 password: controller.login.password
+            });
+        });
+
+        it('should not login with wrong credentials', function () {
+            expect(controller.users).not.toContain({
+                username: controller.login.username,
+                password: 'invalid-password' 
             });
         });
     });
@@ -113,6 +120,70 @@ describe('SampleController', function () {
             it('must not the same as username', function () {
                 expect(controller.register.password).not.toEqual(controller.register.username);
             });
+        });
+
+        it('only name', function () {
+
+        });
+
+        it('only email', function () {
+
+        });
+
+        it('only password', function () {
+
+        });
+
+        it('only confirm password', function () {
+
+        });
+
+        it('only name and email', function () {
+
+        });
+
+        it('only name and password', function () {
+
+        });
+
+        it('only name and confirm password', function () {
+
+        });
+
+        it('only email and password', function () {
+
+        });
+
+        it('only email and confirm password', function () {
+
+        });
+
+        it('only password and confirmation password', function () {
+
+        });
+
+        it('all fields except name', function () {
+
+        });
+
+        it('all fields except password', function () {
+
+        });
+
+        it('all fields except confirm password', function () {
+
+        });
+
+        it('all fields', function () {
+
+        });
+
+        it('without inputs', function () {
+
+        });
+
+        it('password must not match to confirm password', function () {
+
         });
     });
 });
