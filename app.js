@@ -11,7 +11,11 @@
 
         vm.login = login;
         vm.register = register;
+        vm.forgot = forgot;
+        vm.reset = reset;
         vm.users = SampleFactory.all();
+        vm.token = SampleFactory.token;
+        vm.passwordResets = SampleFactory.passwordResets;
 
         function login(params) {
             return SampleFactory.authenticate(params);
@@ -20,15 +24,27 @@
         function register(params) {
             return SampleFactory.save(params);
         }
+
+        function forgot(email) {
+            return SampleFactory.forgotPassword(email);
+        }
+
+        function reset(params) {
+            return SampleFactory.resetPassword(params);
+        }
     }
 
     function SampleFactory() {
         var factory = {
             users: [],
+            passwordResets: [],
             errorMessages: [],
+            token: [],
             authenticate: authenticate,
             all: all,
-            save: save
+            save: save,
+            forgotPassword: forgotPassword,
+            resetPassword: resetPassword
         };
 
         return factory;
@@ -75,6 +91,33 @@
             });
 
             return isLoggedIn;
+        }
+
+        function forgotPassword(email) {
+            factory.token.push(Math.random().toString(36).substring(7));
+            factory.passwordResets.push({
+                email: email,
+                token: factory.token[0]
+            });
+            return true;
+        }
+
+        function resetPassword(params) {
+            var isReset = false;
+
+            factory.passwordResets.forEach(function (passwordReset) {
+                if (passwordReset.email === params.email && passwordReset.token === params.token) {
+                    isReset = true;
+                    passwordReset.password = params.password;
+                    passwordReset.password_confirmation = params.password_confirmation;
+                }
+            });
+
+            if ( ! isReset) {
+                return 'We can\'t find a user with that email address';
+            }
+
+            return true;
         }
     }
 })();

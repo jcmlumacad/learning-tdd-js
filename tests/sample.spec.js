@@ -6,7 +6,8 @@ describe('SampleController', function () {
         name: 'John Doe',
         email: 'john@doe.com',
         password: '123456',
-        password_confirmation: '123456'
+        password_confirmation: '123456',
+        token: 'secret'
     };
 
     beforeEach(module('sample'));
@@ -240,15 +241,51 @@ describe('SampleController', function () {
 
     describe('reset password', function () {
         it('should email your password reset link', function () {
+            var params = {
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            };
 
+            expect(controller.register(params)).toBeTruthy();
+            expect( !! controller.forgot(data.email)).toBeTruthy();
         });
 
         it('should not reset the password with the wrong token', function () {
+            var params = {
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            };
 
+            expect(controller.register(params)).toBeTruthy();
+            expect(controller.forgot(data.email)).toBeTruthy();
+            expect(controller.reset({
+                token: data.token,
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            })).toContain('We can\'t find a user with that email address');
         });
 
         it('should reset the password with the right token', function () {
+            var params = {
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            };
 
+            expect(controller.register(params)).toBeTruthy();
+            expect(controller.forgot(data.email)).toBeTruthy();
+            expect(controller.reset({
+                token: controller.token[0],
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            })).toEqual(true);
         });
     });
 });
