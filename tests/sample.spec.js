@@ -2,6 +2,13 @@
 
 describe('SampleController', function () {
     var controller, factory;
+    var data = {
+        name: 'John Doe',
+        email: 'john@doe.com',
+        password: '123456',
+        password_confirmation: '123456',
+        token: 'secret'
+    };
 
     beforeEach(module('sample'));
 
@@ -10,109 +17,275 @@ describe('SampleController', function () {
     }));
 
     describe('login', function () {
-        describe('username', function () {
-            it('contains letters', function () {
-                expect(controller.login.username).toMatch(/[a-zA-Z]/);
-            });
+        it('should login with correct credentials', function () {
+            var params = {
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            };
 
-            it('contains numbers', function () {
-                expect(controller.login.username).toMatch(/\d+/);
-            });
-
-            it('contains underscore', function () {
-                expect(controller.login.username).toMatch(/[_]/);
-            });
-
-            it('must have a minimum of 6 characters', function () {
-                expect(controller.login.username.length).toBeGreaterThan(5);
-            });
+            expect(controller.register(params)).toBeTruthy();
+            expect(controller.login({
+                email: data.email,
+                password: data.password
+            })).toBeTruthy();
         });
 
-        describe('password', function () {
-            it('contains letters', function () {
-                expect(controller.login.password).toMatch(/[a-z]/);
-            });
-
-            it('contains numbers', function () {
-                expect(controller.login.password).toMatch(/\d+/);
-            });
-
-            it('contains special characters', function () {
-                expect(controller.login.password).toMatch(/[$&+,:;=?@#/\\|'<>.^*()%!_"-]/);
-            });
-
-            it('must have atleast one uppercase letter', function () {
-                expect(controller.login.password).toMatch(/[A-Z]/);
-            });
-
-            it('must have a minimum of 8 characters', function () {
-                expect(controller.login.password.length).toBeGreaterThan(7);
-            });
-
-            it('must not the same as username', function () {
-                expect(controller.login.password).not.toEqual(controller.login.username);
-            });
-        });
-
-        it('must match the login credentials', function () {
-            expect(controller.users).toContain({
-                username: controller.login.username,
-                password: controller.login.password
-            });
+        it('should not login with wrong credentials', function () {
+            expect(controller.login({
+                email: data.email,
+                password: data.password
+            })).toBeFalsy();
         });
     });
 
     describe('register', function () {
-        describe('username', function () {
-            it('must be unique', function () {
-                var usernames = [];
-                controller.users.forEach(function (user) {
-                    usernames.push(user.username);
-                });
-                expect(usernames).not.toContain(controller.register.username);
-            });
+        it('only name', function () {
+            var params = {
+                name: data.name
+            };
 
-            it('contains letters', function () {
-                expect(controller.register.username).toMatch(/[a-zA-Z]/);
-            });
-
-            it('contains numbers', function () {
-                expect(controller.register.username).toMatch(/\d+/);
-            });
-
-            it('contains underscore', function () {
-                expect(controller.register.username).toMatch(/[_]/);
-            });
-
-            it('must have a minimum of 6 characters', function () {
-                expect(controller.register.username.length).toBeGreaterThan(5);
-            });
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The email field is required',
+                'The password field is required'
+            ]));
         });
 
-        describe('password', function () {
-            it('contains letters', function () {
-                expect(controller.register.password).toMatch(/[a-z]/);
-            });
+        it('only email', function () {
+            var params = {
+                email: data.email
+            };
 
-            it('contains numbers', function () {
-                expect(controller.register.password).toMatch(/\d+/);
-            });
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The name field is required',
+                'The password field is required'
+            ]));
+        });
 
-            it('contains special characters', function () {
-                expect(controller.register.password).toMatch(/[$&+,:;=?@#/\\|'<>.^*()%!_"-]/);
-            });
+        it('only password', function () {
+            var params = {
+                password: data.password
+            };
 
-            it('must have atleast one uppercase letter', function () {
-                expect(controller.register.password).toMatch(/[A-Z]/);
-            });
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The name field is required',
+                'The email field is required',
+                'The password confirmation does not match'
+            ]));
+        });
 
-            it('must have a minimum of 8 characters', function () {
-                expect(controller.register.password.length).toBeGreaterThan(7);
-            });
+        it('only confirm password', function () {
+            var params = {
+                password_confirmation: data.password_confirmation
+            };
 
-            it('must not the same as username', function () {
-                expect(controller.register.password).not.toEqual(controller.register.username);
-            });
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The name field is required',
+                'The email field is required',
+                'The password field is required'
+            ]));
+        });
+
+        it('only name and email', function () {
+            var params = {
+                name: data.name,
+                email: data.email
+            };
+
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The password field is required'
+            ]));
+        });
+
+        it('only name and password', function () {
+            var params = {
+                name: data.name,
+                password: data.password
+            };
+
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The email field is required',
+                'The password confirmation does not match'
+            ]));
+        });
+
+        it('only name and confirm password', function () {
+            var params = {
+                name: data.name,
+                password_confirmation: data.password_confirmation
+            };
+
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The email field is required',
+                'The password field is required'
+            ]));
+        });
+
+        it('only email and password', function () {
+            var params = {
+                email: data.email,
+                password: data.password
+            };
+
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The name field is required',
+                'The password confirmation does not match'
+            ]));
+        });
+
+        it('only email and confirm password', function () {
+            var params = {
+                email: data.email,
+                password_confirmation: data.password_confirmation
+            };
+
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The name field is required',
+                'The password field is required'
+            ]));
+        });
+
+        it('only password and confirmation password', function () {
+            var params = {
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            };
+
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The name field is required',
+                'The email field is required'
+            ]));
+        });
+
+        it('all fields except name', function () {
+            var params = {
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            };
+
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The name field is required'
+            ]));
+        });
+
+        it('all fields except email', function () {
+            var params = {
+                name: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            };
+
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The email field is required'
+            ]));
+        });
+
+        it('all fields except password', function () {
+            var params = {
+                name: data.name,
+                email: data.email,
+                password_confirmation: data.password_confirmation
+            };
+
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The password field is required'
+            ]));
+        });
+
+        it('all fields except confirm password', function () {
+            var params = {
+                name: data.name,
+                email: data.email,
+                password: data.password
+            };
+
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The password confirmation does not match'
+            ]));
+        });
+
+        it('all fields', function () {
+            var params = {
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            };
+
+            expect(controller.register(params)).toBeTruthy();
+        });
+
+        it('without inputs', function () {
+            var params = {};
+
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The name field is required',
+                'The email field is required',
+                'The password field is required'
+            ]));
+        });
+
+        it('password must not match to confirm password', function () {
+            var params = {
+                password: data.password,
+                password_confirmation: 'qwerty'
+            };
+
+            expect(controller.register(params)).toEqual(jasmine.arrayContaining([
+                'The password confirmation does not match'
+            ]));
+        });
+    });
+
+    describe('reset password', function () {
+        it('should email your password reset link', function () {
+            var params = {
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            };
+
+            expect(controller.register(params)).toBeTruthy();
+            expect( !! controller.forgot(data.email)).toBeTruthy();
+        });
+
+        it('should not reset the password with the wrong token', function () {
+            var params = {
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            };
+
+            expect(controller.register(params)).toBeTruthy();
+            expect(controller.forgot(data.email)).toBeTruthy();
+            expect(controller.reset({
+                token: data.token,
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            })).toContain('We can\'t find a user with that email address');
+        });
+
+        it('should reset the password with the right token', function () {
+            var params = {
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            };
+
+            expect(controller.register(params)).toBeTruthy();
+            expect(controller.forgot(data.email)).toBeTruthy();
+            expect(controller.reset({
+                token: controller.token[0],
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation
+            })).toEqual(true);
         });
     });
 });
